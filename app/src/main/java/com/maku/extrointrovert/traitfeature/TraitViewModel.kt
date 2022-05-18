@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maku.extrointrovert.core.data.local.models.Question
 import com.maku.extrointrovert.core.data.local.models.Trait
 import com.maku.extrointrovert.core.data.repository.RepoImpl
 import com.maku.extrointrovert.questionsfeature.QuestionsViewState
@@ -35,6 +34,16 @@ class TraitViewModel @Inject constructor(
         subscribeToAllTraitsUpdates()
     }
 
+    fun deleteAll(){
+        viewModelScope.launch {
+            repoImpl.nukeTraitsTable()
+        }
+    }
+
+    fun updateScreenState(ss: String) {
+        _state.value = state.value!!.updateScreenState(ss)
+    }
+
     private fun subscribeToAllTraitsUpdates() {
          getAllTraits()
              .observeOn(AndroidSchedulers.mainThread())
@@ -45,7 +54,6 @@ class TraitViewModel @Inject constructor(
     private fun onAllTraitsList(it: List<Trait>) {
         Log.d("vm", "trait $it")
         _trait.value = it
-        //_state.value = state.value!!.copy(traits = it!!)
     }
 
     fun insertTrait(trait: Trait){

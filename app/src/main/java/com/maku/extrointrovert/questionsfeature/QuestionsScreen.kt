@@ -1,7 +1,6 @@
 package com.maku.extrointrovert.questionsfeature
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +9,8 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Button
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -23,17 +19,20 @@ import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Trait
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.traitfeature.TraitViewModel
+import com.maku.extrointrovert.traitfeature.TraitsScreen
 import com.maku.extrointrovert.ui.MainActivity
+import com.maku.extrointrovert.ui.router.Screen
+import com.maku.extrointrovert.ui.router.TraitsRouter
 
 @Composable
 fun QuestionsScreen(
     questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel,
     mainActivity: MainActivity,
     traitViewModel: TraitViewModel,
+    scoreValue: MutableState<String>,
+    selectedValue: MutableState<String>,
+    questionsState: State<QuestionsViewState?>,
 ) {
-    val questionsState = questionsWithAnswersViewModel.state.observeAsState()
-    val selectedValue = remember { mutableStateOf("") }
-    val scoreValue = remember { mutableStateOf("") }
 
     Column() {
         val list = questionsState.value!!.questions
@@ -67,9 +66,11 @@ fun QuestionsScreen(
                     Button(onClick = {
                         // 1. first save current screen, in case a user leaves the app abruptly.
                         // 2. update share preference to done
-                        // 3. go to personality trait screen
-                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index + 1)
+                        // 3. set screen state to survey
+                        // 4. go to personality trait screen
+                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index)
                         onSaveDone(mainActivity)
+                        TraitsRouter.navigateTo(Screen.Traits)
                     }, enabled = questionsState.value!!.enableButton) {
                         Text(text = "Done")
                     }

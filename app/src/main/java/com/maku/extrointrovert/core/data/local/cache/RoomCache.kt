@@ -53,4 +53,8 @@ class RoomCache @Inject constructor(
         return extroIntroVertDao.getAllTraits()
     }
 
+    override suspend fun nukeTraitsTable() {
+        extroIntroVertDao.nukeTraitsTable()
+    }
+
 }

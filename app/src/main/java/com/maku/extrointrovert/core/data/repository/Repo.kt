@@ -11,4 +11,7 @@ interface Repo {
 
     suspend fun insertTrait(trait: Trait)
     fun getAllTraits(): Flowable<List<Trait>>
+
+    suspend fun nukeTraitsTable()
+
 }

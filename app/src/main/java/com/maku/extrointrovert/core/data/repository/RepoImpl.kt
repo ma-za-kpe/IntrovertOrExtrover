@@ -27,4 +27,8 @@ private val cache: Cache
     override fun getAllTraits(): Flowable<List<Trait>> {
        return cache.getAllTraits()
     }
+
+    override suspend fun nukeTraitsTable() {
+        cache.nukeTraitsTable()
+    }
 }
