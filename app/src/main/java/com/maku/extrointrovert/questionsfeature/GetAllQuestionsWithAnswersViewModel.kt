@@ -61,6 +61,14 @@ class GetAllQuestionsWithAnswersViewModel @Inject constructor(
         _state.value = state.value!!.updateIndex(index)
     }
 
+    fun updateButtonEnabled(enabled: Boolean) {
+        _state.value = state.value!!.updateButtonEnabled(enabled = enabled)
+    }
+
+    fun updateSelectedValue(selectedValue: String) {
+        _state.value = state.value!!.updateSelectedValue(selectedValue =selectedValue)
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
