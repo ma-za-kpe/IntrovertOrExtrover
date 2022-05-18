@@ -1,19 +1,22 @@
 package com.maku.extrointrovert.questionsfeature
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Trait
 import com.maku.extrointrovert.core.utils.Constants
@@ -30,20 +33,46 @@ fun QuestionsScreen(
     scoreValue: MutableState<String>,
     selectedValue: MutableState<String>,
     questionsState: State<QuestionsViewState?>,
+    modifier: Modifier,
 ) {
 
-    Column() {
+    Column(modifier.padding(12.dp)) {
         val list = questionsState.value!!.questions
         val answers = questionsState.value!!.answers
 
         if (list.isNotEmpty()){
-            Text(text = list[questionsState.value!!.index].question)
+
+            Text(
+                text = "Qestion ${list[questionsState.value!!.index].questionId} / 4",
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal,
+                fontSize = 16.sp,
+                color = Color.Gray,
+                textAlign= TextAlign.Start,
+            )
+            Spacer(modifier = modifier.size(5.dp))
+            Text(
+                text = list[questionsState.value!!.index].question,
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                textAlign= TextAlign.Start,
+            )
+            Spacer(modifier = modifier.size(5.dp))
+            Text(
+                text = "You must select at least one option.",
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Italic,
+                fontSize = 16.sp,
+                color = Color.Gray,
+                textAlign= TextAlign.Start,
+            )
+
             AnswerRadioButtons(list[questionsState.value!!.index].questionId, answers,
-                questionsWithAnswersViewModel, selectedValue, scoreValue)
-            Row {
-                Button(onClick = { /*TODO*/ }, enabled = false) {
-                    Text(text = "Previous")
-                }
+                questionsWithAnswersViewModel, selectedValue, scoreValue, modifier)
+            Row(
+                horizontalArrangement = Arrangement.End
+            ) {
 
                 if (questionsState.value!!.index < list.size - 1){
                     Button(onClick = {
@@ -57,8 +86,8 @@ fun QuestionsScreen(
                         selectedValue.value = ""
                         onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index + 1)
                         questionsWithAnswersViewModel.updateIndex(questionsState.value!!.index + 1)
-                    }, enabled = questionsState.value!!.enableButton) {
-                        Text(text = "Next")
+                    }, modifier.fillMaxWidth(), enabled = questionsState.value!!.enableButton) {
+                        Text(text = "Next Question")
                     }
                 } else if (questionsState.value!!.index == list.size - 1){
                     Button(onClick = {
@@ -69,7 +98,7 @@ fun QuestionsScreen(
                         onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index)
                         onSaveDone(mainActivity)
                         TraitsRouter.navigateTo(Screen.Traits)
-                    }, enabled = questionsState.value!!.enableButton) {
+                    }, modifier.fillMaxWidth(), enabled = questionsState.value!!.enableButton) {
                         Text(text = "Done")
                     }
                 }
@@ -84,7 +113,8 @@ fun AnswerRadioButtons(
     answers: List<Answer>,
     questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel,
     selectedValue: MutableState<String>,
-    scoreValue: MutableState<String>
+    scoreValue: MutableState<String>,
+    modifier: Modifier
 ) {
     val isSelectedItem: (String) -> Boolean = { selectedValue.value == it }
     val onChangeState: (String) -> Unit = { selectedValue.value = it }
@@ -105,19 +135,22 @@ fun AnswerRadioButtons(
         items.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.selectable(
-                    selected = isSelectedItem(item.answer),
-                    onClick = {
-                        onScoreState(item.score)
-                        onChangeState(item.answer)
-                              },
-                    role = Role.RadioButton
-                ).padding(8.dp)
+                modifier = Modifier
+                    .selectable(
+                        selected = isSelectedItem(item.answer),
+                        onClick = {
+                            onScoreState(item.score)
+                            onChangeState(item.answer)
+                        },
+                        role = Role.RadioButton
+                    )
+                    .padding(8.dp)
             ) {
                 RadioButton(
                     selected = isSelectedItem(item.answer),
                     onClick = null
                 )
+                Spacer(modifier = modifier.size(5.dp))
                 Text(
                     text = item.answer,
                     modifier = Modifier.fillMaxWidth()

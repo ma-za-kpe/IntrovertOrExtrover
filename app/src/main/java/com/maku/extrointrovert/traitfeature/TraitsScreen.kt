@@ -2,10 +2,14 @@ package com.maku.extrointrovert.traitfeature
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
 import com.maku.extrointrovert.core.presentation.MainActivity
@@ -17,11 +21,12 @@ import com.maku.extrointrovert.ui.router.TraitsRouter
 fun TraitsScreen(
     traitViewModel: TraitViewModel,
     mainActivity: MainActivity,
-    questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel
+    questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel,
+    modifier: Modifier
 ) {
     val trait = traitViewModel.trait.observeAsState().value
-    Column() {
-            Text(text = "$trait")
+    Column(modifier.padding(8.dp)) {
+            Text(text = "${trait}")
             // Text(text = "${trait?.get(0)?.question}")
             Button(onClick = {
                 // 1. we clear traits table
@@ -33,7 +38,7 @@ fun TraitsScreen(
                 questionsWithAnswersViewModel.updateIndex(0)
                 questionsWithAnswersViewModel.updateSelectedValue("")
                 TraitsRouter.navigateTo(Screen.Questions)
-            }) {
+            }, modifier.fillMaxWidth()) {
                 Text(text = "Retake")
             }
 
