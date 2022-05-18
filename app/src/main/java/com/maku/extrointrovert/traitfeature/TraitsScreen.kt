@@ -1,18 +1,14 @@
 package com.maku.extrointrovert.traitfeature
 
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
-import com.maku.extrointrovert.ui.MainActivity
+import com.maku.extrointrovert.core.presentation.MainActivity
 import com.maku.extrointrovert.ui.router.BackButtonHandler
 import com.maku.extrointrovert.ui.router.Screen
 import com.maku.extrointrovert.ui.router.TraitsRouter

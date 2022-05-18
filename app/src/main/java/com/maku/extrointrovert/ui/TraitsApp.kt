@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.maku.extrointrovert.core.presentation.MainActivity
 import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
 import com.maku.extrointrovert.questionsfeature.QuestionsScreen
 import com.maku.extrointrovert.traitfeature.TraitViewModel

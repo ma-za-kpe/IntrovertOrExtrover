@@ -10,7 +10,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -19,8 +18,7 @@ import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Trait
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.traitfeature.TraitViewModel
-import com.maku.extrointrovert.traitfeature.TraitsScreen
-import com.maku.extrointrovert.ui.MainActivity
+import com.maku.extrointrovert.core.presentation.MainActivity
 import com.maku.extrointrovert.ui.router.Screen
 import com.maku.extrointrovert.ui.router.TraitsRouter
 
@@ -98,13 +96,10 @@ fun AnswerRadioButtons(
     Column(Modifier.padding(8.dp)) {
         if (selectedValue.value.isEmpty()){
             // 1. set state to disable the button
-            Text(text = "Selected value: ${selectedValue.value.ifEmpty { "NONE" }}")
             questionsWithAnswersViewModel.updateButtonEnabled(false)
         } else {
-            // save value id in list(shared preference)
-            // set selectedValue state to empty string
             // enable the button to go to next item
-            Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
+            // Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
             questionsWithAnswersViewModel.updateButtonEnabled(true)
         }
         items.forEach { item ->

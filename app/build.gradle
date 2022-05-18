@@ -92,9 +92,6 @@ dependencies {
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0-rc01")
 
-    // pages
-    implementation 'com.github.AppIntro:AppIntro:6.1.0'
-
     // vm
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
