@@ -1,6 +1,7 @@
 package com.maku.extrointrovert.questionsfeature
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,24 +20,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.maku.extrointrovert.core.data.local.models.Answer
+import com.maku.extrointrovert.core.data.local.models.Trait
 import com.maku.extrointrovert.core.utils.Constants
+import com.maku.extrointrovert.traitfeature.TraitViewModel
 import com.maku.extrointrovert.ui.MainActivity
 
 @Composable
 fun QuestionsScreen(
     questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel,
     mainActivity: MainActivity,
+    traitViewModel: TraitViewModel,
 ) {
     val questionsState = questionsWithAnswersViewModel.state.observeAsState()
     val selectedValue = remember { mutableStateOf("") }
+    val scoreValue = remember { mutableStateOf("") }
 
     Column() {
         val list = questionsState.value!!.questions
         val answers = questionsState.value!!.answers
+
         if (list.isNotEmpty()){
             Text(text = list[questionsState.value!!.index].question)
             AnswerRadioButtons(list[questionsState.value!!.index].questionId, answers,
-                questionsWithAnswersViewModel, selectedValue)
+                questionsWithAnswersViewModel, selectedValue, scoreValue)
             Row {
                 Button(onClick = { /*TODO*/ }, enabled = false) {
                     Text(text = "Previous")
@@ -44,21 +50,26 @@ fun QuestionsScreen(
 
                 if (questionsState.value!!.index < list.size - 1){
                     Button(onClick = {
+                        // 0. update room db trait table
                         // 1. reset selected value to empty
-                        // 2. save index in shared preference
+                        // 2. save index in shared preference, set index to the next question state, to avoid saving the same trail twice
                         // 3. change state to next question
+                        traitViewModel.insertTrait(Trait(list[questionsState.value!!.index].question,
+                        selectedValue.value, scoreValue.value ))
+
                         selectedValue.value = ""
-                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index)
+                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index + 1)
                         questionsWithAnswersViewModel.updateIndex(questionsState.value!!.index + 1)
                     }, enabled = questionsState.value!!.enableButton) {
                         Text(text = "Next")
                     }
                 } else if (questionsState.value!!.index == list.size - 1){
                     Button(onClick = {
-                        // go to assessment screen
-                        // first save current screen, in case a user leaves the app.
-                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index)
-
+                        // 1. first save current screen, in case a user leaves the app abruptly.
+                        // 2. update share preference to done
+                        // 3. go to personality trait screen
+                        onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index + 1)
+                        onSaveDone(mainActivity)
                     }, enabled = questionsState.value!!.enableButton) {
                         Text(text = "Done")
                     }
@@ -73,10 +84,12 @@ fun AnswerRadioButtons(
     questionId: Long,
     answers: List<Answer>,
     questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel,
-    selectedValue: MutableState<String>
+    selectedValue: MutableState<String>,
+    scoreValue: MutableState<String>
 ) {
     val isSelectedItem: (String) -> Boolean = { selectedValue.value == it }
     val onChangeState: (String) -> Unit = { selectedValue.value = it }
+    val onScoreState: (String) -> Unit = { scoreValue.value = it }
     val items = answers.filter { ans ->
         ans.questionId == questionId
     }
@@ -97,15 +110,16 @@ fun AnswerRadioButtons(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.selectable(
-                    selected = isSelectedItem(item.answerId.toString()),
+                    selected = isSelectedItem(item.answer),
                     onClick = {
-                        onChangeState(item.answerId.toString())
+                        onScoreState(item.score)
+                        onChangeState(item.answer)
                               },
                     role = Role.RadioButton
                 ).padding(8.dp)
             ) {
                 RadioButton(
-                    selected = isSelectedItem(item.answerId.toString()),
+                    selected = isSelectedItem(item.answer),
                     onClick = null
                 )
                 Text(
@@ -121,6 +135,13 @@ private fun onSaveCurrentQuestionIndex(mainActivity: MainActivity, index: Int) {
     val sharedPref = mainActivity.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
     val editor = sharedPref.edit()
     editor.putInt(Constants.SHARED_PREF_CURRENT_QN_INDEX, index)
+    editor.apply()
+}
+
+private fun onSaveDone(mainActivity: MainActivity) {
+    val sharedPref = mainActivity.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+    val editor = sharedPref.edit()
+    editor.putString(Constants.SHARED_PREF_DONE, "done")
     editor.apply()
 }
 

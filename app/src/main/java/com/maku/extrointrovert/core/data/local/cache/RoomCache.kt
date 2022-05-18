@@ -4,6 +4,7 @@ import com.maku.extrointrovert.core.data.local.daos.ExtroIntroVertDao
 import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Question
 import com.maku.extrointrovert.core.data.local.models.QuestionWithAnswer
+import com.maku.extrointrovert.core.data.local.models.Trait
 import io.reactivex.Flowable
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -42,6 +43,14 @@ class RoomCache @Inject constructor(
 
     override fun getAllAnswers(): Flowable<List<Answer>> {
         return extroIntroVertDao.getAllAnswers()
+    }
+
+    override suspend fun insertTrait(trait: Trait) {
+        extroIntroVertDao.insertTrait(trait)
+    }
+
+    override fun getAllTraits(): Flowable<List<Trait>> {
+        return extroIntroVertDao.getAllTraits()
     }
 
 }

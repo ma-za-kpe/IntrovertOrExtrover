@@ -13,28 +13,33 @@ import androidx.compose.ui.Modifier
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
 import com.maku.extrointrovert.questionsfeature.QuestionsScreen
+import com.maku.extrointrovert.traitfeature.TraitViewModel
 import com.maku.extrointrovert.ui.ui.theme.ExtroIntroVertTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val questionsWithAnswersViewModel: GetAllQuestionsWithAnswersViewModel by viewModels()
+    private val traitViewModel: TraitViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val index = sharedPref.getInt(Constants.SHARED_PREF_CURRENT_QN_INDEX, 0)
-        Log.d("Compose MainActivity", "index $index")
-
+        val done = sharedPref.getString(Constants.SHARED_PREF_DONE, null)
         setContent {
             ExtroIntroVertTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    // check if user asked to retake
-                    // also, using shared preferences, check saved question index, and update state accordingly.
-                    questionsWithAnswersViewModel.updateIndex(index)
-                    // in case a user leaves the app and comes back later, tere state has been saved.
-                    QuestionsScreen(questionsWithAnswersViewModel, this)
+                    // 1. check if user asked to retake
+                    if (done == "done") {
+                        // got to personality trait screen
+                    } else {
+                        // also, using shared preferences, check saved question index, and update state accordingly.
+                        questionsWithAnswersViewModel.updateIndex(index)
+                        // in case a user leaves the app and comes back later, tere state has been saved.
+                        QuestionsScreen(questionsWithAnswersViewModel, this, traitViewModel)
+                    }
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.maku.extrointrovert.core.data.local.cache.Cache
 import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Question
 import com.maku.extrointrovert.core.data.local.models.QuestionWithAnswer
+import com.maku.extrointrovert.core.data.local.models.Trait
 import io.reactivex.Flowable
 import javax.inject.Inject
 
@@ -17,5 +18,13 @@ private val cache: Cache
 
     override fun getAllAnswers(): Flowable<List<Answer>> {
         return cache.getAllAnswers()
+    }
+
+    override suspend fun insertTrait(trait: Trait) {
+        cache.insertTrait(trait)
+    }
+
+    override fun getAllTraits(): Flowable<List<Trait>> {
+       return cache.getAllTraits()
     }
 }
