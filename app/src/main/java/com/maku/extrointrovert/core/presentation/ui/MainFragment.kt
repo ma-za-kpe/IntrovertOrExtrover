@@ -1,4 +1,4 @@
-package com.maku.extrointrovert.questionsfeature
+package com.maku.extrointrovert.core.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.maku.extrointrovert.R
+import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ExtroIntroVertFragment : Fragment() {
+class MainFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ExtroIntroVertFragment()
+        fun newInstance() = MainFragment()
     }
 
     private lateinit var viewModel: GetAllQuestionsWithAnswersViewModel

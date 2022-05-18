@@ -24,10 +24,14 @@ class RoomCache @Inject constructor(
             val questions = Question.DEFAULT_QUESTIONS.toTypedArray()
             val answers = Answer.DEFAULT_ANSWERS.toTypedArray()
 
-            if (extroIntroVertDao.getQuestionSync().isEmpty() && extroIntroVertDao.getAnswerSync().isEmpty()) {
+            if (extroIntroVertDao.getQuestionSync().isEmpty()) {
                 // insert all questions and answers
                  extroIntroVertDao.insertAllQuestions(*questions)
-                 extroIntroVertDao.insertAllAnswers(*answers)
+            }
+
+            if (extroIntroVertDao.getAnswerSync().isEmpty()) {
+                // insert all answers
+                extroIntroVertDao.insertAllAnswers(*answers)
             }
         }
     }

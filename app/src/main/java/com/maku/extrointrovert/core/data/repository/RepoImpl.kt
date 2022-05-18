@@ -1,5 +1,6 @@
 package com.maku.extrointrovert.core.data.repository
 
+import android.util.Log
 import com.maku.extrointrovert.core.data.local.cache.Cache
 import com.maku.extrointrovert.core.data.local.models.Answer
 import com.maku.extrointrovert.core.data.local.models.Question
