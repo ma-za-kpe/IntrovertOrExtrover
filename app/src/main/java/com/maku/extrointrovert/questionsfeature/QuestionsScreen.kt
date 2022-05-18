@@ -129,7 +129,7 @@ fun AnswerRadioButtons(
             questionsWithAnswersViewModel.updateButtonEnabled(false)
         } else {
             // enable the button to go to next item
-            // Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
+             Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
             questionsWithAnswersViewModel.updateButtonEnabled(true)
         }
         items.forEach { item ->
