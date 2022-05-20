@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val sharedPref = this.getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val index = sharedPref.getInt(Constants.SHARED_PREF_CURRENT_QN_INDEX, 0)
-        val done = sharedPref.getString(Constants.SHARED_PREF_DONE, null)
         setContent {
             ExtroIntroVertTheme {
                 // A surface container using the 'background' color from the theme
@@ -33,8 +32,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background) {
                     // also, using shared preferences, check saved question index, and update state accordingly.
                     questionsWithAnswersViewModel.updateIndex(index)
-
-                    // MainScreen(questionsWithAnswersViewModel, this, traitViewModel)
                     TraitsApp(questionsWithAnswersViewModel, this, traitViewModel)
                 }
             }

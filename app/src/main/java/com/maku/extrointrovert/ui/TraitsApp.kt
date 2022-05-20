@@ -35,7 +35,6 @@ fun TraitsApp(
   val questionsState = questionsWithAnswersViewModel.state.observeAsState()
   val selectedValue = remember { mutableStateOf("") }
   val scoreValue = remember { mutableStateOf("") }
-  val screenState = traitViewModel.state.value?.survey
   val modifier = Modifier
 
   Surface(color = MaterialTheme.colors.background) {

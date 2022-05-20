@@ -19,7 +19,7 @@ import javax.inject.Singleton
 abstract class CacheModule {
 
     @Binds
-    abstract fun bindCache(cache: RoomCache): Cache
+    abstract fun bindCache(cache: RoomCache): Cache // inject interface implementations
 
   companion object {
 
