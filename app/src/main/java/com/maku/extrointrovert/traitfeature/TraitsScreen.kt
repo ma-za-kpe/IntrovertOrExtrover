@@ -1,18 +1,19 @@
 package com.maku.extrointrovert.traitfeature
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.maku.extrointrovert.core.presentation.MainActivity
 import com.maku.extrointrovert.core.utils.Constants
 import com.maku.extrointrovert.questionsfeature.GetAllQuestionsWithAnswersViewModel
-import com.maku.extrointrovert.core.presentation.MainActivity
 import com.maku.extrointrovert.ui.router.BackButtonHandler
 import com.maku.extrointrovert.ui.router.Screen
 import com.maku.extrointrovert.ui.router.TraitsRouter
@@ -25,9 +26,31 @@ fun TraitsScreen(
     modifier: Modifier
 ) {
     val trait = traitViewModel.trait.observeAsState().value
+    val intovert = trait?.count { it.score == "introvert" }
+    val extrovert = trait?.count { it.score == "extrovert" }
+
     Column(modifier.padding(8.dp)) {
-            Text(text = "${trait}")
-            // Text(text = "${trait?.get(0)?.question}")
+        Text(text = "${trait?.get(0)?.question} ${trait?.get(0)?.answer}")
+        Spacer(modifier = (modifier.size(5.dp)))
+        Text(text = "${trait?.get(1)?.question} ${trait?.get(1)?.answer}")
+        Spacer(modifier = (modifier.size(5.dp)))
+        Text(text = "${trait?.get(2)?.question} ${trait?.get(2)?.answer}")
+//            Text(text = "${trait?.get(3)?.question} ${trait?.get(3)?.answer}")
+        Spacer(modifier = (modifier.size(5.dp)))
+        if (intovert!! > extrovert!!){
+            Text(text = "You are an introvert",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+        } else {
+            Text(text = "You are an extrovert",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+        }
+        Spacer(modifier = (modifier.size(5.dp)))
             Button(onClick = {
                 // 1. we clear traits table
                 traitViewModel.deleteAll()
@@ -43,7 +66,6 @@ fun TraitsScreen(
             }
 
     }
-
     BackButtonHandler {
         TraitsRouter.navigateTo(Screen.Questions)
     }
