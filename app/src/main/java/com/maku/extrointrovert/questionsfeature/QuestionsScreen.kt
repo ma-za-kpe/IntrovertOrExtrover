@@ -95,6 +95,7 @@ fun QuestionsScreen(
                         // 2. update share preference to done
                         // 3. set screen state to survey
                         // 4. go to personality trait screen
+                        selectedValue.value = ""
                         onSaveCurrentQuestionIndex(mainActivity, questionsState.value!!.index)
                         onSaveDone(mainActivity)
                         TraitsRouter.navigateTo(Screen.Traits)
@@ -129,7 +130,7 @@ fun AnswerRadioButtons(
             questionsWithAnswersViewModel.updateButtonEnabled(false)
         } else {
             // enable the button to go to next item
-             Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
+            // Text(text = "Selected value is: ${selectedValue.value.ifEmpty { "NONE" }}")
             questionsWithAnswersViewModel.updateButtonEnabled(true)
         }
         items.forEach { item ->
